@@ -1,0 +1,160 @@
+<html>
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+	<title></title>
+	
+	
+<script>	
+	function insertMovie(){
+		var f=document.createElement("form");
+		f.setAttribute('method',"post");
+		f.setAttribute('action',"insertmovie.php");
+	
+		
+	
+		var j=document.createElement("input");
+		j.setAttribute('type',"text");
+		j.setAttribute('name',"Movie Title");
+		j.setAttribute('style',"color:#888;");
+		j.setAttribute('value',"Movie Title");
+		j.setAttribute('onfocus',"inputFocus(this)");
+		j.setAttribute('onblur',"inputBlur(this)");
+		
+		var i=document.createElement("input");
+		i.setAttribute('type',"text");
+		i.setAttribute('name',"Category");
+		i.setAttribute('style',"color:#888;");
+		i.setAttribute('value',"Category");
+		i.setAttribute('onfocus',"inputFocus(this)");
+		i.setAttribute('onblur',"inputBlur(this)");
+		
+		var k=document.createElement("select");
+		k.setAttribute('name',"users");
+		k.setAttribute('onchange',"showUser(this.value)");
+		
+
+        var s=document.createElement("input");
+		s.setAttribute('type',"submit");
+		s.setAttribute('value',"Submit");
+
+		
+		f.appendChild(j);
+		f.appendChild(i);
+		f.appendChild(k);
+		f.appendChild(s);
+		document.getElementsByTagName('body')[0].appendChild(f);
+	
+	
+	
+	
+		function showUser(str) {
+		if (str=="") {
+		document.getElementById("txtHint").innerHTML="";
+		return;
+		} 
+		if (window.XMLHttpRequest) {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+		} else { // code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+		
+		document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+		
+		xmlDoc.getElementsByTagName("Categories")[0].childNodes[0].nodeValue;
+		//εδω θελω να δημιουργησω δυναμικά ένα dropdown με options τα categories από την βάση δεδομένων
+		
+			}
+		}
+		xmlhttp.open("GET","getCategories.php?q="+str,true);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.responseXML;
+		}
+	
+	}
+
+	
+	
+	
+	 function dispalyMovies(){
+		if (window.XMLHttpRequest){
+			// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+		}
+		else{
+		// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.open("GET","displayMovies.php",false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.responseXML; 
+		
+		var x=xmlDoc.getElementsByTagName("Movies");
+		for (i=0;i<x.length;i++)
+		{ 
+		document.write(x[i].getElementsByTagName("MovieId")[0].childNodes[0].nodeValue);
+		document.write(x[i].getElementsByTagName("Movie Title")[0].childNodes[0].nodeValue);
+		document.write(x[i].getElementsByTagName("Category")[0].childNodes[0].nodeValue);
+		}
+		document.write("</table>");
+
+		
+	}	
+		
+		function changeMovie(){
+			if (window.XMLHttpRequest){
+			// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp=new XMLHttpRequest();
+		}
+		else{
+		// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.open("GET","displayMovies.php",false);
+		xmlhttp.send();
+		xmlDoc=xmlhttp.responseXML;
+		
+		
+	
+		for (i=0;i<x.length;i++)
+		{ 
+		document.write(x[i].getElementsByTagName("MovieId")[0].childNodes[0].nodeValue);
+		document.write(x[i].getElementsByTagName("Movie Title")[0].childNodes[0].nodeValue);
+		document.write(x[i].getElementsByTagName("Category")[0].childNodes[0].nodeValue);
+		document.write(x[i].getElementsByTagName("Edit Movie")[0].childNodes[0].nodeValue);
+		document.write(x[i].getElementsByTagName("Delete Movie")[0].childNodes[0].nodeValue);
+		}
+		document.write("</table>");
+		
+		var y=document.createElement("form");
+		y.setAttribute('method',"post");
+		y.setAttribute('action',"changeMovie.php");
+		
+		var v=document.createElement("input");
+		v.setAttribute('type',"hidden");
+		v.setAttribute('name',"Delete Movie");
+		v.setAttribute('value',"<?php echo $movietitle; ?>");
+		v.setAttribute('type',"submit");
+		v.setAttribute('name',"delete_row");
+		
+		f.appendChild(v);
+		document.getElementsByTagName('body')[0].appendChild(y);
+	}	
+</script>	
+		
+		
+		
+<body>
+
+
+	
+	
+	
+     <button type="button" onclick="insertMovie()">Insert Movie</button>
+	 <button type="button" onclick="dispayMovies()">Display the list of Movies</button>
+	 <button type="button" onclick="changeMovie()">Change Movie</button>
+</body>
+</html>
